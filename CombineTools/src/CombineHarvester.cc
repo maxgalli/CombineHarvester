@@ -10,6 +10,7 @@
 #include "CombineHarvester/CombineTools/interface/Parameter.h"
 #include "CombineHarvester/CombineTools/interface/Logging.h"
 #include "CombineHarvester/CombineTools/interface/TFileIO.h"
+#include "RooFormulaVar.h"
 
 namespace ch {
 
