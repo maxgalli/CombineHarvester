@@ -10,6 +10,7 @@
 #include "CombineHarvester/CombineTools/interface/Parameter.h"
 #include "CombineHarvester/CombineTools/interface/Logging.h"
 #include "CombineHarvester/CombineTools/interface/TFileIO.h"
+#include "RooFormulaVar.h"
 
 namespace ch {
 
@@ -673,10 +674,10 @@ std::shared_ptr<RooWorkspace> CombineHarvester::SetupWorkspace(
     // bugs
     if (GetFlag("workspaces-use-clone")) {
       wspaces_[std::string(ws.GetName())] = std::shared_ptr<RooWorkspace>(
-          reinterpret_cast<RooWorkspace*>(ws.Clone()));      
+          reinterpret_cast<RooWorkspace*>(ws.Clone()));
     } else {
       wspaces_[std::string(ws.GetName())] =
-          std::make_shared<RooWorkspace>(RooWorkspace(ws));  
+          std::make_shared<RooWorkspace>(RooWorkspace(ws));
     }
     return wspaces_.at(ws.GetName());
   }
@@ -712,7 +713,7 @@ std::shared_ptr<RooWorkspace> CombineHarvester::SetupWorkspace(
   std::shared_ptr<RooWorkspace> new_wsp;
   if (GetFlag("workspaces-use-clone")) {
     new_wsp = std::shared_ptr<RooWorkspace>(
-        reinterpret_cast<RooWorkspace*>(ws.Clone(new_name.c_str())));    
+        reinterpret_cast<RooWorkspace*>(ws.Clone(new_name.c_str())));
   } else {
     new_wsp = std::make_shared<RooWorkspace>(RooWorkspace(ws));
   }
@@ -738,7 +739,7 @@ void CombineHarvester::ImportParameters(RooArgSet *vars) {
         if ((y->hasError() || y->hasAsymError()) &&
             flags_["import-parameter-err"]) {
           par.set_err_d(y->getErrorLo());
-          par.set_err_u(y->getErrorHi());          
+          par.set_err_u(y->getErrorHi());
         } else {
           par.set_err_d(0.);
           par.set_err_u(0.);
@@ -894,22 +895,22 @@ void CombineHarvester::AddExtArgValue(std::string const& name, double const& val
 
 double CombineHarvester::getParFromWs(const std::string name){
     double r=0.; bool found=false;
-      for (auto & item : wspaces_) { 
+      for (auto & item : wspaces_) {
           if (item.second.get()->var(name.c_str())) {
               if (found) std::cout<<"WARNING-DUPLICATE: ALREADY FOUND "<<name<<"in an other ws"<<r<<std::endl;
               r=item.second.get()->var(name.c_str())->getVal();
               found=true;
           }
       }
-      return r; 
+      return r;
   }
 
 void CombineHarvester::setParInWs(const std::string name,double value) {
-    for (auto & item : wspaces_) { 
+    for (auto & item : wspaces_) {
         if (item.second.get()->var(name.c_str())){
             if ( item.second.get()->var(name.c_str())->getMin() >value) item.second.get()->var(name.c_str())->setMin(value-0.001);
             if ( item.second.get()->var(name.c_str())->getMax() <value) item.second.get()->var(name.c_str())->setMax(value+0.001);
-            item.second.get()->var(name.c_str())->setVal(value); 
+            item.second.get()->var(name.c_str())->setVal(value);
         }
     }
   }

@@ -17,6 +17,7 @@
 #include "TH1.h"
 #include "RooRealVar.h"
 #include "RooCategory.h"
+#include "RooFormulaVar.h"
 #include "CombineHarvester/CombineTools/interface/Observation.h"
 #include "CombineHarvester/CombineTools/interface/Process.h"
 #include "CombineHarvester/CombineTools/interface/Systematic.h"

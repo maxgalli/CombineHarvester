@@ -132,7 +132,7 @@ void (CombineHarvester::*Overload2_WriteDatacard)(
 void Overload3_WriteDatacard(ch::CombineHarvester& cb, std::string const& name, bp::object& file){
   TFile *file_ = nullptr;
   if (!file.is_none())
-    file_ = (TFile*)(TPython::ObjectProxy_AsVoidPtr(file.ptr()));
+    file_ = (TFile*)(CPyCppyy::Instance_FromVoidPtr(file.ptr(), ""));
   cb.WriteDatacard(name,*file_);
 }
 
@@ -231,7 +231,7 @@ BOOST_PYTHON_MODULE(libCombineHarvesterCombineTools)
 
   py::to_python_converter<RooWorkspace,
                           convert_cpp_root_to_py_root<RooWorkspace>>();
-  
+
   // Define converters from python --> C++
   convert_py_seq_to_cpp_vector<std::string>();
   convert_py_tup_to_cpp_pair<int, std::string>();
@@ -488,7 +488,7 @@ BOOST_PYTHON_MODULE(libCombineHarvesterCombineTools)
       .def("SetPoissonErrors", &BinByBinFactory::SetPoissonErrors,
            py::return_internal_reference<>())
     ;
-    
+
     py::class_<AutoRebin>("AutoRebin")
       .def("Rebin", &AutoRebin::Rebin)
       .def("SetVerbosity", &AutoRebin::SetVerbosity,
